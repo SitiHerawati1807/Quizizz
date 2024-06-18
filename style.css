@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.timer-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.timer {
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+body {
+    background-image: url('https://ingress-cdn.pressreader.com/imageserver/v1/image/article-images/a008c6ba-1f21-48e6-9ce1-425f332404c6'); /* Ganti dengan nama file gambar Anda */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Tetapkan gambar agar tetap di tempat saat digulir */
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container, .question-container {
+    background: rgba(255, 255, 255, 0.8); /* Agar kontainer tidak sepenuhnya transparan */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 600px;
+    overflow: hidden;
+    text-align: center;
+    padding: 20px 40px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+h2::after {
+    content: '';
+    width: 50px;
+    height: 3px;
+    background-color: #8f99f3;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+label {
+    display: block;
+    font-size: 1rem;
+    margin: 1rem 0;
+    color: #666;
+}
+
+input[type="text"], input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border 0.3s;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border: 1px solid #8f99f3;
+    outline: none;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+ul li {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+}
+
+ul li label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+ul li input[type="radio"] {
+    margin-right: 1rem;
+    transform: scale(1.2);
+}
+
+button {
+    background-color: #8f99f3;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #8f99f3;
+    transform: translateY(-2px);
+}
+
+button:focus {
+    outline: none;
+    background-color: #8f99f3;
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#user-info {
+    margin-bottom: 2rem;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+#user-info label {
+    font-size: 1.2rem;
+    color: #333;
+    display: inline-block;
+    width: 100px;
+}
+
+#user-info input[type="text"] {
+    display: inline-block;
+    width: calc(100% - 120px);
+    margin-bottom: 10px;
+}

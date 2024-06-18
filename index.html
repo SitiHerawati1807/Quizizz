@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Quiz App</title>
+</head>
+<body>
+    <div class="container login-container" id="login">
+        <h2>Login</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required><br><br>
+        <button id="login-btn">Login</button>
+    </div>
+    <div class="container" id="user-info" style="display:none;">
+        <h2>User Information</h2>
+        <label for="name">Name:</label>
+        <input type="text" id="name" required><br><br>
+        <label for="class">Class:</label>
+        <input type="text" id="class" required><br><br>
+        <label for="major">Major:</label>
+        <input type="text" id="major" required><br><br>
+        <button id="start-quiz">Start Quiz</button>
+    </div>
+    <div class="container question-container" id="quiz" style="display:none;">
+        <div id="question-container">
+            <div class="timer-container" id="timer-container">
+                <div id="timer" class="timer"></div> 
+            </div>
+            <h2 id="question">Question Text</h2>
+            <ul>
+                <li>
+                    <label>
+                        <input type="radio" class="answer" id="a" name="answer">
+                        <span id="a_text">Answer A</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" class="answer" id="b" name="answer">
+                        <span id="b_text">Answer B</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" class="answer" id="c" name="answer">
+                        <span id="c_text">Answer C</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" class="answer" id="d" name="answer">
+                        <span id="d_text">Answer D</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+        <button id="submit">Submit</button>
+    </div>
+    <div class="container" id="result" style="display:none;">
+        <h2>Quiz Completed!</h2>
+        <p id="final-score"></p>
+    </div>
+    <script>
+        const quizData = [
+    {
+        question: "Bahasa apa yang berjalan di peramban web?",
+        a: "Java",
+        b: "C",
+        c: "Python",
+        d: "JavaScript",
+        correct: "d",
+    },
+    {
+        question: "Apa yang dimaksud dengan CSS?",
+        a: "Central Style Sheets",
+        b: "Cascading Style Sheets",
+        c: "Cascading Simple Sheets",
+        d: "Cars SUVs Sailboats",
+        correct: "b",
+    },
+    {
+        question: "Apa yang dimaksud dengan HTML?",
+        a: "Hypertext Markup Language",
+        b: "Hypertext Markdown Language",
+        c: "Hyperloop Machine Language",
+        d: "Helicopters Terminals Motorboats Lamborghinis",
+        correct: "a",
+    },
+    {
+        question: "Tahun berapa JavaScript diluncurkan?",
+        a: "1996",
+        b: "1995",
+        c: "1994",
+        d: "tidak satu pun dari di atas",
+        correct: "b",
+    },
+    {
+        question: "Apa yang dimaksud dengan PHP?",
+        a: "Hypertext Preprocessor",
+        b: "Personal Home Page",
+        c: "Private Home Page",
+        d: "Hypertext Programming",
+        correct: "a",
+    },
+    {
+        question: "Perusahaan mana yang mengembangkan bahasa pemrograman C++?",
+        a: "Sun Microsystems",
+        b: "Microsoft",
+        c: "IBM",
+        d: "Bell Labs",
+        correct: "d",
+    },
+    {
+        question: "Siapa bapak bahasa pemrograman Python?",
+        a: "Guido van Rossum",
+        b: "Larry Page",
+        c: "Elon Musk",
+        d: "Mark Zuckerberg",
+        correct: "a",
+    },
+    {
+        question: "Apa ibu kota Prancis?",
+        a: "Berlin",
+        b: "Madrid",
+        c: "Paris",
+        d: "Roma",
+        correct: "c",
+    },
+    {
+        question: "Planet mana yang dikenal sebagai Planet Merah?",
+        a: "Venus",
+        b: "Mars",
+        c: "Jupiter",
+        d: "Saturnus",
+        correct: "b",
+    },
+    {
+        question: "Apa simbol kimia untuk air?",
+        a: "W",
+        b: "H2O",
+        c: "H",
+        d: "O2",
+        correct: "b",
+    }
+];
+
+        const loginContainer = document.getElementById('login');
+        const userInfo = document.getElementById('user-info');
+        const quiz = document.getElementById('quiz');
+        const answerEls = document.querySelectorAll('.answer');
+        const questionEl = document.getElementById('question');
+        const a_text = document.getElementById('a_text');
+        const b_text = document.getElementById('b_text');
+        const c_text = document.getElementById('c_text');
+        const d_text = document.getElementById('d_text');
+        const submitBtn = document.getElementById('submit');
+        const startQuizBtn = document.getElementById('start-quiz');
+        const loginBtn = document.getElementById('login-btn');
+        const finalScoreEl = document.getElementById('final-score');
+        const resultContainer = document.getElementById('result');
+
+        let currentQuiz = 0;
+        let score = 0;
+        let userName = '';
+        let userClass = '';
+        let userMajor = '';
+        let startTime, interval;
+
+        loginBtn.addEventListener('click', login);
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
+                loginContainer.style.display = 'none';
+                userInfo.style.display = 'block';
+            } else {
+                alert('Please enter username and password.');
+            }
+        }
+
+        startQuizBtn.addEventListener('click', startQuiz);
+
+        function startQuiz() {
+            userName = document.getElementById('name').value;
+            userClass = document.getElementById('class').value;
+            userMajor = document.getElementById('major').value;
+
+            if (userName && userClass && userMajor) {
+                quiz.style.display = 'block';
+                userInfo.style.display = 'none';
+                startTimer();
+                loadQuiz();
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+
+        function startTimer() {
+            startTime = new Date().getTime();
+            interval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            let currentTime = new Date().getTime();
+            let elapsedTime = currentTime - startTime;
+            let minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+            document.getElementById("timer").innerHTML = "Time: " + minutes + "m " + seconds + "s ";
+        }
+
+        function loadQuiz() {
+            deselectAnswers();
+
+            const currentQuizData = quizData[currentQuiz];
+
+            questionEl.innerText = currentQuizData.question;
+            a_text.innerText = currentQuizData.a;
+            b_text.innerText = currentQuizData.b;
+            c_text.innerText = currentQuizData.c;
+            d_text.innerText = currentQuizData.d;
+        }
+
+        function deselectAnswers() {
+            answerEls.forEach(answerEl => answerEl.checked = false);
+        }
+
+        function getSelected() {
+            let answer;
+
+            answerEls.forEach(answerEl => {
+                if (answerEl.checked) {
+                    answer = answerEl.id;
+                }
+            });
+
+            return answer;
+        }
+
+        submitBtn.addEventListener('click', () => {
+            const answer = getSelected();
+
+            if (answer) {
+                if (answer === quizData[currentQuiz].correct) {
+                    score++;
+                }
+
+                currentQuiz++;
+
+                if (currentQuiz < quizData.length) {
+                    loadQuiz();
+                } else {
+                    clearInterval(interval);
+                    showScore();
+                }
+            }
+        });
+
+        function showScore() {
+            let endTime = new Date().getTime();
+            let elapsedTime = endTime - startTime;
+            let minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+            let finalTime = "You completed the quiz in " + minutes + " minutes and " + seconds + " seconds.";
+
+            quiz.innerHTML = `
+                <h2>${userName}, from class ${userClass} (${userMajor}), you answered ${score}/${quizData.length} questions correctly.</h2>
+                <p>${finalTime}</p>
+                <button onclick="location.reload()">Reload</button>
+            `;
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
